@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { User } from 'src/auth/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 import { TaskStatus } from './tasks-status.enum';
 
@@ -15,4 +17,9 @@ export class Task {
 
   @Column()
   status: TaskStatus;
+
+  // when {eager : true}, this entity will automatically fetch the related data without making another call
+  @ManyToOne(() => User, (user) => user.tasks, { eager: false })
+  @Exclude({ toPlainOnly: true })
+  user: User;
 }
